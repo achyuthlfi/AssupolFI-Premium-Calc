@@ -1,9 +1,6 @@
-// Import your class here. Adjust the path as necessary.
-
 import { premiumCalculator } from "../classes/calc";
 import { TRequest } from "../interfaces/interfaces";
 
-// Example data structure for TRequest - adjust according to your actual interface
 const request: TRequest = {
   application: {
     version: 1,
