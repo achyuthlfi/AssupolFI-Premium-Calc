@@ -1,10 +1,21 @@
 import { premiumCalculator } from "../classes/calc";
-import { TRequest } from "../interfaces/interfaces";
+import { TRequest, TResponse } from "../interfaces/interfaces";
 
 const request: TRequest = {
   application: {
     version: 1,
     assureds: [
+      {
+        funeralBenefit: 10000,
+        relationshipCategory: "526ae21e-259f-4f33-9d38-2687efa98968",
+        assuredIdentifier: null,
+        age: 36,
+        fullTimeStudent: false,
+        accidentalDeathBenefit: 0,
+        memorialBenefit: 0,
+        healthPlusBenefit: 0,
+        onCallPlusBenefit: 0,
+      },
       {
         funeralBenefit: 10000,
         relationshipCategory: "526ae21e-259f-4f33-9d38-2687efa98968",
@@ -34,13 +45,15 @@ const request: TRequest = {
   },
 };
 
-async function run() {
+async function getPremiums(): Promise<TResponse | any> {
   //const calculator = premiumCalculator();
   try {
     const response = await premiumCalculator.calculatePremiums(request);
     console.log("Premium Calculation Response:", response);
+    return response;
   } catch (error) {
     console.error("Failed to calculate premiums:", error);
+    return null;
   }
 }
-run();
+getPremiums();

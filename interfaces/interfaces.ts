@@ -81,3 +81,43 @@ export interface AssuredFromRes {
   fullTimeStudent: boolean;
   funeralPremium: number;
 }
+
+export interface PremiumCalculationsResponse {
+  cashBackPremium: number;
+  familyIncomePremium: number;
+  paidUpPremium: number;
+  waiverDeathPremium: number;
+  waiverDeathPlusPremium: number;
+  waiverRetrenchmentPremium: number;
+  benefitIncreasePercentage: number;
+  accidentalDeathPremiumTotal: number;
+  funeralPremiumTotal: number;
+  healthPlusPremiumTotal: number;
+  memorialPremiumTotal: number;
+  onCallPlusPremiumTotal: number;
+  premiumTotal: number;
+  assupolOnCallPremium: number;
+  assureds: AssuredResponse[];
+  commissionAmounts: CommissionAmountResponse[];
+}
+
+export interface AssuredResponse {
+  funeralPremium: number;
+  accidentalDeathPremium: number;
+  memorialPremium: number;
+  healthPlusPremium: number;
+  onCallPlusPremium: number;
+  categoryB1A: boolean;
+  categoryA: boolean;
+  amountAboveLimit: number;
+  age: number;
+  relationshipCategory: string;
+  assuredIdentifier: string;
+  fullTimeStudent: boolean;
+}
+
+export interface CommissionAmountResponse {
+  commissionType: string;
+  amount: number;
+  amountYearTwo: number;
+}

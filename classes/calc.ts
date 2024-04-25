@@ -10,30 +10,44 @@ import {
   ReqAssured,
   ResAssured,
   AssuredFromRes,
+  PremiumCalculationsResponse,
 } from "../interfaces/interfaces";
 import tariffJson from "../data/TarrifResultXML.json";
-import { findTariff } from "../tarrifCalc/getTarrif";
+import { findTariff, getTariffDiscountTariff } from "../tarrifCalc/getTarrif";
 
 class premiumCalculations {
   // Replace with your actual class name
   private request: TRequest | any;
-  private response: TResponse | any;
+  private response: PremiumCalculationsResponse | any;
 
   constructor() {
     // Initialize the response object and its assureds array
     this.response = {
       assureds: [],
-      // Initialize other properties of the response as well...
     };
   }
 
   private initializeResponse() {
-    if (!this.response) {
-      this.response = { assureds: [] };
-    }
-    if (!this.response.assureds) {
-      this.response.assureds = [];
-    }
+    this.response = {
+      cashBackPremium: 0,
+      familyIncomePremium: 0,
+      paidUpPremium: 0,
+      waiverDeathPremium: 0,
+      waiverDeathPlusPremium: 0,
+      waiverRetrenchmentPremium: 0,
+      benefitIncreasePercentage: 4,
+      accidentalDeathPremiumTotal: 0,
+      funeralPremiumTotal: 0,
+      healthPlusPremiumTotal: 0,
+      memorialPremiumTotal: 0,
+      onCallPlusPremiumTotal: 0,
+      premiumTotal: 0,
+      assupolOnCallPremium: 0,
+      assureds: [],
+      commissionAmounts: [],
+    };
+
+    return this.response;
   }
 
   public async calculatePremiums(request: TRequest): Promise<TResponse> {
@@ -41,7 +55,7 @@ class premiumCalculations {
       throw new Error("request cannot be null");
     }
     this.request = request;
-    this.initializeResponse(); // Ensure response is initialized
+    this.response = this.initializeResponse(); // Ensure response is initialized
 
     for (const assured of request.application.assureds) {
       // Funeral
@@ -149,7 +163,14 @@ class premiumCalculations {
       assuredResponse.age,
       assuredResponse.funeralPremium
     );
+    const tariffDiscount = await getTariffDiscountTariff(
+      8,
+      assuredResponse.age,
+      assuredResponse.funeralPremium
+    );
+
     console.log("tariff response", tariff);
+    console.log("tariffDiscount response", tariffDiscount);
     const funeralPrincipalFactor = parseInt(tariff.FuneralPrincipalFactor) ?? 0;
 
     /* const tariff = TariffService.getTariff(
@@ -182,7 +203,8 @@ class premiumCalculations {
           (assured.funeralBenefit * funeralPrincipalFactor) / premiumDividend;
         /* assuredResponse.funeralPremium *=
           1 - tariffDiscount.percentagePrincipal / premiumPercentage; */
-        assuredResponse.funeralPremium *= 1 - 0 / premiumPercentage;
+        assuredResponse.funeralPremium *=
+          1 - tariffDiscount.PercentagePrincipal / premiumPercentage;
         break;
 
       case RelationshipCategory.Spouse:
@@ -194,7 +216,8 @@ class premiumCalculations {
           1 - tariffDiscount.percentageSpouseChildren / premiumPercentage;
         assuredResponse.funeralPremium /=
           1 + TariffGeneral.waiverDeathPercentage / premiumPercentage; */
-        assuredResponse.funeralPremium *= 1 - 0 / premiumPercentage;
+        assuredResponse.funeralPremium *=
+          1 - tariffDiscount.PercentageSpouseChildren / premiumPercentage;
         assuredResponse.funeralPremium /= 1 + 0 / premiumPercentage;
         break;
 
@@ -207,7 +230,8 @@ class premiumCalculations {
         assuredResponse.funeralPremium /=
                 1 + TariffGeneral.waiverDeathPercentage / premiumPercentage; */
 
-        assuredResponse.funeralPremium *= 1 - 0 / premiumPercentage;
+        assuredResponse.funeralPremium *=
+          1 - tariffDiscount.PercentageOther / premiumPercentage;
         assuredResponse.funeralPremium /= 1 + 0 / premiumPercentage;
         break;
 
@@ -220,7 +244,8 @@ class premiumCalculations {
         assuredResponse.funeralPremium /=
                 1 + TariffGeneral.waiverDeathPercentage / premiumPercentage; */
 
-        assuredResponse.funeralPremium *= 1 - 0 / premiumPercentage;
+        assuredResponse.funeralPremium *=
+          1 - tariffDiscount.PercentageOther / premiumPercentage;
         assuredResponse.funeralPremium /= 1 + 0 / premiumPercentage;
         break;
     }

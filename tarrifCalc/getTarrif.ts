@@ -54,7 +54,7 @@ export async function findTariff(
   for (const item of tariffJson) {
     //console.log("Checking item:", item);
     if (item.fkTariffVersionID === fkTariffVersionID) {
-      console.log("Found matching fkTariffVersionID:", item);
+      //console.log("Found matching fkTariffVersionID:", item);
       try {
         const properties = await parseXMLProperties(item.Properties);
         //console.log("Parsed Properties:", properties);
@@ -64,6 +64,37 @@ export async function findTariff(
         ) {
           return properties;
         }
+      } catch (error) {
+        console.error("Error parsing XML:", error);
+        return null;
+      }
+    }
+  }
+
+  console.log("No matching tariff found.");
+  return null; // Return null if no matching record is found
+}
+
+export async function getTariffDiscountTariff(
+  fkTariffVersionID: number,
+  age: number,
+  coverAmount: number
+): Promise<Properties | any> {
+  //console.log("Total Tariffs:", tariffJson.length);
+  console.log("fkTariffVersionID", fkTariffVersionID, age, coverAmount);
+  for (const item of tariffJson) {
+    //console.log("getTariffDiscountTariff item:", item);
+    if (item.fkTariffVersionID === fkTariffVersionID) {
+      console.log("Found matching fkTariffVersionID:", item);
+      try {
+        const properties = await parseXMLProperties(item.Properties);
+        //console.log("Parsed Properties:", properties);
+        /* if (
+          parseInt(properties.Age || "0", 10) === age &&
+          parseFloat(properties.CoverAmount || "0") === coverAmount
+        ) { */
+        return properties;
+        //}
       } catch (error) {
         console.error("Error parsing XML:", error);
         return null;
