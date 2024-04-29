@@ -80,6 +80,13 @@ export interface AssuredFromRes {
   relationshipCategory: string;
   fullTimeStudent: boolean;
   funeralPremium: number;
+  categoryB1A: boolean;
+  categoryA: boolean;
+  accidentalDeathPremium: number;
+  memorialPremium: number;
+  healthPlusPremium: number;
+  onCallPlusPremium: number;
+  amountAboveLimit: number;
 }
 
 export interface PremiumCalculationsResponse {

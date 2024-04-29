@@ -20,7 +20,7 @@ const request: TRequest = {
         funeralBenefit: 10000,
         relationshipCategory: "526ae21e-259f-4f33-9d38-2687efa98968",
         assuredIdentifier: null,
-        age: 36,
+        age: 26,
         fullTimeStudent: false,
         accidentalDeathBenefit: 0,
         memorialBenefit: 0,
